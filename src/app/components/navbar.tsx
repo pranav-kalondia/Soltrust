@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { Menu, X } from "lucide-react";
 import { LogoMark } from "./ui-kit";
 
@@ -13,6 +13,7 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -20,6 +21,69 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const sections = links.map((l) => document.querySelector(l.href));
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-25% 0px -55% 0px", // Trigger when section is in the viewport center
+      threshold: 0.1,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id");
+          if (id) {
+            setActiveSection(`#${id}`);
+          }
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
+    const handleScroll = () => {
+      if (window.scrollY < 100) {
+        setActiveSection("");
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      sections.forEach((section) => {
+        if (section) observer.unobserve(section);
+      });
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleLinkClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) {
+      const elementPosition = target.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - 80;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+    setOpen(false);
+  };
+
+  const handleLogoClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    setOpen(false);
+  };
 
   return (
     <header
@@ -34,7 +98,11 @@ export function Navbar() {
           }`}
         >
           {/* Logo */}
-          <a href="#top" className="flex items-center gap-2.5">
+          <a
+            href="#top"
+            onClick={handleLogoClick}
+            className="flex items-center gap-2.5"
+          >
             <LogoMark />
             <span className="text-lg font-bold tracking-tight">
               Sol<span className="sol-gradient-text">Trust</span>
@@ -47,14 +115,17 @@ export function Navbar() {
               <a
                 key={l.href}
                 href={l.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                onClick={(e) => handleLinkClick(e, l.href)}
+                className={`text-sm font-medium transition-colors duration-300 ${
+                  activeSection === l.href
+                    ? "text-[#14F1D9]"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
               >
                 {l.label}
               </a>
             ))}
           </nav>
-
-
 
           {/* Mobile toggle */}
           <button
@@ -75,13 +146,16 @@ export function Navbar() {
               <a
                 key={l.href}
                 href={l.href}
-                onClick={() => setOpen(false)}
-                className="rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
+                onClick={(e) => handleLinkClick(e, l.href)}
+                className={`rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 ${
+                  activeSection === l.href
+                    ? "bg-gradient-to-r from-[#9945FF]/10 to-[#14F1D9]/5 text-[#14F1D9] font-semibold"
+                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                }`}
               >
                 {l.label}
               </a>
             ))}
-
           </div>
         </div>
       )}
