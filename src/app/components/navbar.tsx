@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { LogoMark } from "./ui-kit";
 
 const links = [
   { label: "Vision", href: "#vision" },
@@ -34,9 +35,7 @@ export function Navbar() {
         >
           {/* Logo */}
           <a href="#top" className="flex items-center gap-2.5">
-            <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#9945FF] to-[#14F1D9] shadow-[0_0_24px_-4px_rgba(153,69,255,0.8)]">
-              <span className="h-3.5 w-3.5 rounded-sm bg-[#070B14]" />
-            </span>
+            <LogoMark />
             <span className="text-lg font-bold tracking-tight">
               Sol<span className="sol-gradient-text">Trust</span>
             </span>

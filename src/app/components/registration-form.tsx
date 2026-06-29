@@ -1,6 +1,7 @@
-import { useState, type ReactNode } from "react";
-import { Check, Loader2 } from "lucide-react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
+import { Check, Loader2, ChevronDown, Search } from "lucide-react";
 import { GlowButton } from "./ui-kit";
+import { countries } from "./countries";
 
 function Field({
   label,
@@ -31,6 +32,54 @@ export function RegistrationForm({
 }) {
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
   const [agree, setAgree] = useState(true);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const filteredCountries = countries.filter((c) =>
+    c.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    if (isDropdownOpen) {
+      const timer = setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
+    } else {
+      setSearchQuery("");
+    }
+  }, [isDropdownOpen]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,17 +132,91 @@ export function RegistrationForm({
           </Field>
         ) : (
           <Field label="Country">
-            <select className={inputCls} defaultValue="">
-              <option value="" disabled>
-                Select country
-              </option>
-              <option>United Arab Emirates</option>
-              <option>Singapore</option>
-              <option>Switzerland</option>
-              <option>United Kingdom</option>
-              <option>Germany</option>
-              <option>Other</option>
-            </select>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
+                className={`${inputCls} flex items-center justify-between text-left transition-all duration-300 ${
+                  isDropdownOpen
+                    ? "border-[#9945FF]/60 bg-white/[0.06] shadow-[0_0_0_3px_rgba(153,69,255,0.18)]"
+                    : ""
+                }`}
+                aria-haspopup="listbox"
+                aria-expanded={isDropdownOpen}
+              >
+                <span
+                  className={
+                    selectedCountry ? "text-foreground" : "text-muted-foreground/70"
+                  }
+                >
+                  {selectedCountry || "Select country"}
+                </span>
+                <ChevronDown
+                  className={`h-4 w-4 text-muted-foreground/70 transition-transform duration-300 ${
+                    isDropdownOpen ? "rotate-180 text-[#14F1D9]" : ""
+                  }`}
+                />
+              </button>
+
+              {isDropdownOpen && (
+                <div className="absolute left-0 right-0 z-50 mt-2 max-h-72 overflow-hidden rounded-xl border border-white/10 bg-[#0B1020]/95 shadow-[0_12px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col">
+                  {/* Search box */}
+                  <div className="relative p-2 border-b border-white/10 flex items-center">
+                    <Search className="absolute left-4 h-4 w-4 text-muted-foreground/50" />
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      placeholder="Search country..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (filteredCountries.length > 0) {
+                            setSelectedCountry(filteredCountries[0]);
+                            setIsDropdownOpen(false);
+                            setSearchQuery("");
+                          }
+                        }
+                      }}
+                      className="w-full rounded-lg border border-white/5 bg-white/[0.03] py-2 pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-all focus:border-[#9945FF]/40 focus:bg-white/[0.05]"
+                    />
+                  </div>
+
+                  {/* Scrollable List */}
+                  <div className="max-h-52 overflow-y-auto p-1.5">
+                    {filteredCountries.length > 0 ? (
+                      filteredCountries.map((country) => {
+                        const isSelected = selectedCountry === country;
+                        return (
+                          <button
+                            key={country}
+                            type="button"
+                            onClick={() => {
+                              setSelectedCountry(country);
+                              setIsDropdownOpen(false);
+                              setSearchQuery("");
+                            }}
+                            className={`w-full rounded-lg px-4 py-2.5 text-left text-sm transition-all duration-200 ${
+                              isSelected
+                                ? "bg-gradient-to-r from-[#9945FF]/30 to-[#14F1D9]/20 text-white font-medium ring-1 ring-[#14F1D9]/30"
+                                : "text-muted-foreground hover:bg-white/[0.06] hover:text-white"
+                            }`}
+                          >
+                            {country}
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <div className="px-4 py-3 text-center text-sm text-muted-foreground/60">
+                        No countries found
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              <input type="hidden" name="country" value={selectedCountry} />
+            </div>
           </Field>
         )}
       </div>

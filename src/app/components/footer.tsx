@@ -7,6 +7,7 @@ import {
   BookOpen,
   ArrowRight,
 } from "lucide-react";
+import { LogoMark } from "./ui-kit";
 
 const columns = [
   {
@@ -44,9 +45,7 @@ export function Footer() {
           {/* Brand + newsletter */}
           <div className="col-span-2 lg:col-span-2">
             <a href="#top" className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#9945FF] to-[#14F1D9]">
-                <span className="h-3.5 w-3.5 rounded-sm bg-[#070B14]" />
-              </span>
+              <LogoMark />
               <span className="text-lg font-bold tracking-tight">
                 Sol<span className="sol-gradient-text">Trust</span>
               </span>
