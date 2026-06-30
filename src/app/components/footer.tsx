@@ -60,7 +60,7 @@ export function Footer() {
                 e.preventDefault();
                 if (email) setSent(true);
               }}
-              className="mt-6 flex max-w-sm items-center gap-2"
+              className="mt-6 flex w-full max-w-sm items-center gap-2"
             >
               <div className="relative flex-1">
                 <input

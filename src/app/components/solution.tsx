@@ -234,8 +234,8 @@ export function Solution() {
           />
         </Reveal>
 
-        {/* Horizontal flow */}
-        <Reveal delay={100}>
+        {/* Horizontal flow (Desktop) */}
+        <Reveal delay={100} className="hidden md:block">
           <div className="mt-16 flex flex-wrap items-stretch justify-center gap-3">
             {flow.map((f, i) => (
               <div key={f.label} className="flex items-center gap-3">
@@ -246,7 +246,26 @@ export function Solution() {
                   <span className="text-xs font-medium leading-tight">{f.label}</span>
                 </div>
                 {i < flow.length - 1 && (
-                  <ChevronRight className="hidden h-5 w-5 flex-shrink-0 text-[#9945FF] sm:block" />
+                  <ChevronRight className="h-5 w-5 flex-shrink-0 text-[#9945FF]" />
+                )}
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* Vertical flow (Mobile) */}
+        <Reveal delay={100} className="block md:hidden">
+          <div className="mt-12 flex flex-col items-center gap-2">
+            {flow.map((f, i) => (
+              <div key={f.label} className="flex flex-col items-center w-full max-w-sm">
+                <div className="group flex w-full items-center gap-4 rounded-2xl sol-glass p-4 transition-all duration-500 hover:border-white/20">
+                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#9945FF]/30 to-[#14F1D9]/20 ring-1 ring-white/10">
+                    <f.icon className="h-5 w-5 text-[#14F1D9]" />
+                  </div>
+                  <span className="text-sm font-semibold">{f.label}</span>
+                </div>
+                {i < flow.length - 1 && (
+                  <div className="my-2 h-6 w-0.5 bg-gradient-to-b from-[#9945FF] to-[#14F1D9]" />
                 )}
               </div>
             ))}

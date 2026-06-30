@@ -39,7 +39,7 @@ export function Tokenomics() {
         <div className="mt-16 grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
           {/* Donut */}
           <Reveal>
-            <div className="relative mx-auto aspect-square w-full max-w-md">
+            <div className="relative mx-auto w-full max-w-md h-[320px] sm:h-[380px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie

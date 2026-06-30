@@ -50,7 +50,7 @@ export function FinalCta() {
               <h3 className="mb-5 text-xl font-bold tracking-tight">
                 Reserve your spot
               </h3>
-              <RegistrationForm compact cta="Reserve Your Spot" />
+              <RegistrationForm compact cta="Reserve" />
             </div>
           </div>
         </div>
