@@ -7,7 +7,6 @@ const links = [
   { label: "Solution", href: "#solution" },
   { label: "Tokenomics", href: "#tokenomics" },
   { label: "Roadmap", href: "#roadmap" },
-  { label: "Team", href: "#team" },
 ];
 
 export function Navbar() {
@@ -96,6 +95,7 @@ export function Navbar() {
           className={`flex w-full items-center justify-between rounded-2xl px-4 py-2.5 transition-all duration-500 ${
             scrolled ? "sol-glass shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)]" : ""
           }`}
+          style={scrolled ? { background: "rgba(7, 11, 20, 0.8)" } : undefined}
         >
           {/* Logo */}
           <a
@@ -141,7 +141,10 @@ export function Navbar() {
       {/* Mobile menu */}
       {open && (
         <div className="mx-auto mt-3 max-w-7xl px-5 lg:hidden sm:px-8">
-          <div className="sol-glass flex flex-col gap-1 rounded-2xl p-4">
+          <div
+            className="sol-glass flex flex-col gap-1 rounded-2xl p-4"
+            style={{ background: "rgba(7, 11, 20, 0.8)" }}
+          >
             {links.map((l) => (
               <a
                 key={l.href}

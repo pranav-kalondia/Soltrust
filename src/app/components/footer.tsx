@@ -6,8 +6,9 @@ import {
   Github,
   BookOpen,
   ArrowRight,
+  AlertTriangle,
 } from "lucide-react";
-import { LogoMark } from "./ui-kit";
+import { LogoMark, Reveal } from "./ui-kit";
 
 const columns = [
   {
@@ -41,6 +42,22 @@ export function Footer() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#9945FF]/60 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        {/* Risk Disclaimer Joining Card */}
+        <Reveal>
+          <div className="sol-glass -mt-10 mb-16 rounded-2xl p-6 border border-amber-500/20 bg-amber-500/[0.02]">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-amber-400/10 ring-1 ring-amber-400/20">
+                <AlertTriangle className="h-5 w-5 text-amber-400" />
+              </span>
+              <div>
+                <h3 className="text-base font-bold tracking-tight text-amber-400">Risk Disclaimer</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  Participation in digital asset projects carries inherent risk. Digital asset prices are highly volatile, global regulations evolve, and smart contracts carry smart contract risks. This is not financial advice. Do your own research.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Reveal>
         <div className="grid grid-cols-2 gap-10 lg:grid-cols-6">
           {/* Brand + newsletter */}
           <div className="col-span-2 lg:col-span-2">
