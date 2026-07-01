@@ -1,10 +1,7 @@
 import { useState } from "react";
 import {
   Send,
-  MessageCircle,
   Twitter,
-  Github,
-  BookOpen,
   ArrowRight,
   AlertTriangle,
 } from "lucide-react";
@@ -26,11 +23,8 @@ const columns = [
 ];
 
 const socials = [
-  { icon: Send, label: "Telegram" },
-  { icon: MessageCircle, label: "Discord" },
-  { icon: Twitter, label: "Twitter / X" },
-  { icon: Github, label: "GitHub" },
-  { icon: BookOpen, label: "Medium" },
+  { icon: Send, label: "Telegram", url: "https://t.me/SolTrustcoin" },
+  { icon: Twitter, label: "Twitter / X", url: "https://x.com/SolTrustCoin" },
 ];
 
 export function Footer() {
@@ -126,7 +120,9 @@ export function Footer() {
               {socials.map((s) => (
                 <li key={s.label}>
                   <a
-                    href="#"
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group inline-flex items-center gap-2.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     <s.icon className="h-4 w-4 text-[#14F1D9] transition-transform group-hover:scale-110" />
