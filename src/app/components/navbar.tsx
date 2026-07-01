@@ -90,7 +90,7 @@ export function Navbar() {
         scrolled ? "py-3" : "py-5"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8">
+      <div className="mx-auto w-full flex max-w-7xl items-center justify-between px-5 sm:px-8">
         <div
           className={`flex w-full items-center justify-between rounded-2xl px-4 py-2.5 transition-all duration-500 ${
             scrolled ? "sol-glass shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)]" : ""
