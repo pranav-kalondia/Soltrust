@@ -4,9 +4,9 @@ import { Lock, Infinity as InfinityIcon, Flame, Gem } from "lucide-react";
 import { Reveal, SectionHeading, CountUp } from "./ui-kit";
 
 const allocation = [
-  { name: "Treasury & Liquidity", value: 40, color: "#9945FF" },
-  { name: "Team & Contributors", value: 30, color: "#3B82F6" },
-  { name: "Community DAO", value: 20, color: "#14F1D9" },
+  { name: "Treasury & Liquidity", value: 50, color: "#9945FF" },
+  { name: "Team & Contributors", value: 10, color: "#3B82F6" },
+  { name: "Community DAO", value: 30, color: "#14F1D9" },
   { name: "Marketing", value: 10, color: "#C084FC" },
 ];
 
