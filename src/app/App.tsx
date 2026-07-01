@@ -9,7 +9,7 @@ import { Footer } from "./components/footer";
 
 export default function App() {
   return (
-    <div className="relative min-h-screen scroll-smooth bg-background text-foreground antialiased">
+    <div className="relative min-h-screen overflow-x-hidden scroll-smooth bg-background text-foreground antialiased">
       <Navbar />
       <main>
         <Hero />
