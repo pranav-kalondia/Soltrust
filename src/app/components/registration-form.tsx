@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, type ReactNode } from "react";
 import { Check, Loader2, ChevronDown, Search } from "lucide-react";
 import { GlowButton } from "./ui-kit";
 import { countries } from "./countries";
+import { supabase } from "../lib/supabase";
 
 function Field({
   label,
@@ -81,12 +82,53 @@ export function RegistrationForm({
     };
   }, []);
 
-  const submit = (e: React.FormEvent) => {
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (status !== "idle") return;
     setStatus("loading");
-    // Front-end demo — wire to a backend / Supabase to persist registrations.
-    setTimeout(() => setStatus("done"), 1300);
+    setErrorMsg(null);
+
+    const formData = new FormData(e.currentTarget);
+    const full_name = formData.get("full_name") as string;
+    const email = formData.get("email") as string;
+    const wallet_address = formData.get("wallet_address") as string;
+    const telegram = formData.get("telegram") as string;
+    const country = formData.get("country") as string;
+
+    try {
+      if (supabase) {
+        const { error } = await supabase.from("registrations").insert([
+          {
+            full_name,
+            email,
+            wallet_address: wallet_address || null,
+            telegram: telegram || null,
+            country: country || null,
+          },
+        ]);
+
+        if (error) {
+          throw new Error(error.message);
+        }
+      } else {
+        // Fallback for demonstration when environment variables are not set
+        console.log("No Supabase configuration detected. Simulating submission:", {
+          full_name,
+          email,
+          wallet_address,
+          telegram,
+          country,
+        });
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+      setStatus("done");
+    } catch (error: any) {
+      console.error("Failed to submit registration:", error);
+      setErrorMsg(error.message || "Something went wrong. Please try again.");
+      setStatus("idle");
+    }
   };
 
   if (status === "done") {
@@ -108,11 +150,12 @@ export function RegistrationForm({
     <form onSubmit={submit} className="flex flex-col gap-4">
       <div className={compact ? "grid gap-4 sm:grid-cols-2" : "grid gap-4"}>
         <Field label="Full Name">
-          <input required placeholder="Satoshi Vega" className={inputCls} />
+          <input required name="full_name" placeholder="Satoshi Vega" className={inputCls} />
         </Field>
         <Field label="Email">
           <input
             required
+            name="email"
             type="email"
             placeholder="you@protonmail.com"
             className={inputCls}
@@ -120,15 +163,15 @@ export function RegistrationForm({
         </Field>
         {!compact && (
           <Field label="Wallet Address (Optional)">
-            <input placeholder="7xK… Solana address" className={inputCls} />
+            <input name="wallet_address" placeholder="7xK… Solana address" className={inputCls} />
           </Field>
         )}
         <Field label="Telegram">
-          <input placeholder="@username" className={inputCls} />
+          <input name="telegram" placeholder="@username" className={inputCls} />
         </Field>
         {compact ? (
           <Field label="Wallet Address">
-            <input placeholder="7xK… Solana address" className={inputCls} />
+            <input name="wallet_address" placeholder="7xK… Solana address" className={inputCls} />
           </Field>
         ) : (
           <Field label="Country">
@@ -241,6 +284,12 @@ export function RegistrationForm({
             financial advice.
           </span>
         </button>
+      )}
+
+      {errorMsg && (
+        <p className="text-xs text-red-400 font-medium text-center bg-red-500/10 border border-red-500/20 py-2.5 px-3 rounded-xl">
+          {errorMsg}
+        </p>
       )}
 
       <GlowButton type="submit" size="lg" className="mt-1 w-full">
