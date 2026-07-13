@@ -245,48 +245,16 @@ export function SectionHeading({
 /* ------------------------------------------------------------------ */
 /* SolTrust Premium Logo Mark                                        */
 /* ------------------------------------------------------------------ */
-export function LogoMark({ className = "h-9 w-9" }: { className?: string }) {
+export function LogoMark({ className = "h-11 w-11" }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={`${className} transition-all duration-300 hover:scale-110`}
-    >
-      <defs>
-        <linearGradient id="soltrust-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#9945FF" />
-          <stop offset="100%" stopColor="#14F1D9" />
-        </linearGradient>
-        <linearGradient id="soltrust-grad-2" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#2BFF88" />
-          <stop offset="100%" stopColor="#9945FF" />
-        </linearGradient>
-        <filter id="logo-glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="1.5" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-      </defs>
-      
-      {/* Outer tech ring */}
-      <circle cx="16" cy="16" r="14" stroke="url(#soltrust-grad-1)" strokeWidth="1" strokeDasharray="3 3" opacity="0.25" />
-      
-      {/* Interlocking modern S-ribbon elements with glowing effect */}
-      <path
-        d="M16 6c5.52 0 10 4.48 10 10h-4c0-3.31-2.69-6-6-6s-6 2.69-6 6H6c0-5.52 4.48-10 10-10z"
-        fill="url(#soltrust-grad-1)"
-        filter="url(#logo-glow)"
+    <div className={`${className} relative overflow-hidden rounded-full border border-yellow-500/20 bg-black transition-all duration-300 hover:scale-110 shadow-[0_0_15px_rgba(234,179,8,0.15)]`}>
+      <img
+        src="/logo.jpg"
+        alt="SolTrust Logo"
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ transform: "scale(1.3) translateY(11.5%)" }}
       />
-      <path
-        d="M16 26c-5.52 0-10-4.48-10-10h4c0 3.31 2.69 6 6 6s6-2.69 6-6h4c0 5.52-4.48 10-10 10z"
-        fill="url(#soltrust-grad-2)"
-        filter="url(#logo-glow)"
-      />
-      
-      {/* Central core node */}
-      <circle cx="16" cy="16" r="4.5" fill="#070B14" />
-      <circle cx="16" cy="16" r="2.2" fill="#14F1D9" />
-    </svg>
+    </div>
   );
 }
 
